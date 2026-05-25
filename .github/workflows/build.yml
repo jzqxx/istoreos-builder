@@ -1,4 +1,4 @@
-name: 📦 Build iStoreOS 24.10.2 x86_64
+name: 📦 Build iStoreOS 24.10.x x86_64
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
         description: |
           是否编译 Docker 插件
         required: true
-        default: 'yes'
+        default: 'no'
         type: choice
         options:
           - 'yes'
@@ -35,7 +35,7 @@ jobs:
       
     - name: ⏬ 下载 ImageBuilder
       run: |
-        curl -L -o imagebuilder.tar.zst https://github.com/wukongdaily/istoreos-builder/releases/download/20250725/istoreos-imagebuilder-x86-64.Linux-x86_64.tar.zst
+        curl -L -o imagebuilder.tar.zst https://fw0.koolcenter.com/iStoreOS/ib/x86_64/istoreos-imagebuilder-x86-64.Linux-x86_64.tar.zst
         tar --use-compress-program=unzstd -xvf imagebuilder.tar.zst
         mv istoreos-imagebuilder-* imagebuilder
         
@@ -71,7 +71,7 @@ jobs:
     - name: 🚀 上传到 Release
       uses: softprops/action-gh-release@v2.2.1
       with:
-        tag_name: iStoreOS-24.10.2-x86-efi
+        tag_name: iStoreOS-24.10.6-x86-efi
         files: |
           imagebuilder/bin/targets/x86/64/*squashfs-combined-efi.img.gz
         token: ${{ secrets.GITHUB_TOKEN }}

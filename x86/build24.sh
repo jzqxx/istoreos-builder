@@ -12,12 +12,15 @@ else
   # ============= 同步第三方插件库==============
   # 同步第三方软件仓库run/ipk
   echo "🔄 正在同步第三方软件仓库 Cloning run file repo..."
-  git clone --depth=1 https://github.com/wukongdaily/store.git /tmp/store-run-repo
+  git clone --depth=1 https://github.com/hza81007155/store-app.git /tmp/store-run-repo
 
   # 拷贝 run/x86 下所有 run 文件和ipk文件 到 extra-packages 目录
   mkdir -p extra-packages
   cp -r /tmp/store-run-repo/run/x86/* extra-packages/
 
+  # 下载 run文件到extra-packages 目录
+  curl -L --create-dirs -o extra-packages/passwall-x86.run "https://github.com/hza81007155/store-app/releases/download/passwall-x86-run/passwall-x86.run"
+  
   echo "✅ Run files copied to extra-packages:"
   ls -lh extra-packages/*.run
   # 解压并拷贝ipk到packages目录
@@ -59,8 +62,20 @@ PACKAGES="$PACKAGES kmod-igc"
 PACKAGES="$PACKAGES kmod-ixgbe"
 PACKAGES="$PACKAGES kmod-ixgbevf"
 PACKAGES="$PACKAGES kmod-nf-nathelper"
+PACKAGES="$PACKAGES kmod-nf-ipt"
+PACKAGES="$PACKAGES kmod-nf-ipt6"
+PACKAGES="$PACKAGES kmod-nf-ipvs"
+PACKAGES="$PACKAGES kmod-nf-nat6"
+PACKAGES="$PACKAGES kmod-nf-socket"
+PACKAGES="$PACKAGES kmod-nf-tproxy"
+PACKAGES="$PACKAGES kmod-nf-nathelper"
 PACKAGES="$PACKAGES kmod-nf-nathelper-extra"
 PACKAGES="$PACKAGES kmod-nft-offload"
+PACKAGES="$PACKAGES kmod-nft-bridge"
+PACKAGES="$PACKAGES kmod-nft-compat"
+PACKAGES="$PACKAGES kmod-nft-netdev"
+PACKAGES="$PACKAGES kmod-nft-socket"
+PACKAGES="$PACKAGES kmod-nft-tproxy"
 PACKAGES="$PACKAGES kmod-pcnet32"
 PACKAGES="$PACKAGES kmod-r8101"
 PACKAGES="$PACKAGES kmod-r8125"
@@ -72,6 +87,11 @@ PACKAGES="$PACKAGES kmod-usb-net"
 PACKAGES="$PACKAGES kmod-usb-net-asix"
 PACKAGES="$PACKAGES kmod-usb-net-asix-ax88179"
 PACKAGES="$PACKAGES kmod-usb-net-rtl8150"
+PACKAGES="$PACKAGES kmod-usb-net-cdc-eem"
+PACKAGES="$PACKAGES kmod-usb-net-cdc-ether"
+PACKAGES="$PACKAGES kmod-usb-net-cdc-mbim"
+PACKAGES="$PACKAGES kmod-usb-net-cdc-ncm"
+PACKAGES="$PACKAGES kmod-usb-net-cdc-subset"
 PACKAGES="$PACKAGES kmod-vmxnet3"
 PACKAGES="$PACKAGES libc"
 PACKAGES="$PACKAGES libgcc"
@@ -119,7 +139,7 @@ PACKAGES="$PACKAGES luci-i18n-firewall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-cifs-mount-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-unishare-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-dockerman-zh-cn"
+# PACKAGES="$PACKAGES luci-i18n-dockerman-zh-cn"
 
 # LuCI 主题与功能
 PACKAGES="$PACKAGES luci-theme-argon"
@@ -157,7 +177,7 @@ echo "$PACKAGES"
 
 
 # 开始构建
-make image PROFILE=generic PACKAGES="$PACKAGES" FILES="files" ROOTFS_PARTSIZE=2048
+make image PROFILE=generic PACKAGES="$PACKAGES" FILES="files" ROOTFS_PARTSIZE=1024
 
 if [ $? -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Error: Build failed!"
